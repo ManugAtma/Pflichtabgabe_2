@@ -13,13 +13,13 @@ public class TaskTest {
     @BeforeEach
     public void createTasks() {
 
-        cal1 = new GregorianCalendar();
-        cal1.set(Calendar.DAY_OF_MONTH, 3);
+        cal1 = new GregorianCalendar(2024,Calendar.MARCH,3);
+        // cal1.set(Calendar.DAY_OF_MONTH, 3);
         System.out.println(cal1.getTime());
         t1 = new Task("work out", cal1, false);
 
-        cal2 = new GregorianCalendar();
-        cal2.set(Calendar.DAY_OF_MONTH, 20);
+        cal2 = new GregorianCalendar(2024,Calendar.MARCH,20);
+        // cal2.set(Calendar.DAY_OF_MONTH, 20);
         System.out.println(cal2.getTime());
         t2 = new Task("shop", cal2, false);
     }
@@ -70,16 +70,12 @@ public class TaskTest {
     @Test
     public void testTaskCompareToEqual() throws Exception {
 
-        cal1 = new GregorianCalendar();
-        cal1.set(Calendar.DAY_OF_MONTH, 3);
-        Thread.sleep(2000); // make sure cal1 and cal2 have different values of (milli)seconds
-        cal2 = new GregorianCalendar();
         cal2.set(Calendar.DAY_OF_MONTH, 3);
 
         t1.setDeadline(cal1);
         t2.setDeadline(cal2);
         System.out.println(t1);
         System.out.println(t2);
-        assertTrue(t1.compareTo(t2) == 0);
+        assertEquals(0, t1.compareTo(t2));
     }
 }

@@ -68,11 +68,6 @@ public class Task implements TaskInterface {
 
         if (anotherTask == null) throw new NullPointerException("anotherTask cannot be null");
 
-        if ((this.deadline.get(GregorianCalendar.YEAR) == anotherTask.deadline.get(GregorianCalendar.YEAR))
-                && (this.deadline.get(GregorianCalendar.MONTH) == anotherTask.deadline.get(GregorianCalendar.MONTH))
-                && (this.deadline.get(GregorianCalendar.DAY_OF_MONTH) == anotherTask.deadline.get(GregorianCalendar.DAY_OF_MONTH))
-        ) return 0;
-
         if (this.deadline.compareTo(anotherTask.getDeadline()) < 0) return -1;
         if (this.deadline.compareTo(anotherTask.getDeadline()) > 0) return 1;
         return 0;
@@ -83,7 +78,7 @@ public class Task implements TaskInterface {
 
         String status;
         if (done) status = "✔";
-        else status = "x";
+        else status = "✘";
 
         int day = deadline.get(GregorianCalendar.DAY_OF_MONTH);
         int month = deadline.get(GregorianCalendar.MONTH) + 1;

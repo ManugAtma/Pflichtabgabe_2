@@ -20,6 +20,16 @@ public class ToDoList implements ToDoListInterface {
         return length;
     }
 
+    /*public int testGetLength(){
+        Entry p = head;
+        int result = 0;
+        while(p != null){
+            result++;
+            p = p.next;
+        }
+        return result;
+    }*/
+
     /**
      * liefert die Aufgabe zurueck, die am Index index in der ToDo-Liste vorhanden ist, und null sonst
      *
@@ -51,15 +61,18 @@ public class ToDoList implements ToDoListInterface {
         if (head == null) return new int[0];
 
         int[] arr = new int[length];
-        int i = 0;
+        int arrIndex = 0;
+        int listIndex = 0;
         Entry p = head;
-        Task task = new Task("x", deadline, false); // to be able to use compareTo method from Task
-        while (p != null && (p.task.compareTo(task) <= 0)) {
-            arr[i] = i;
+        while (p != null && (p.task.getDeadline().compareTo(deadline) <= 0)) {
+            if (!p.task.getDone()) {
+                arr[arrIndex] = listIndex;
+                arrIndex++;
+            }
             p = p.next;
-            i++;
+            listIndex++;
         }
-        return Arrays.copyOfRange(arr, 0, i);
+        return Arrays.copyOfRange(arr, 0, arrIndex);
     }
 
 
@@ -83,6 +96,14 @@ public class ToDoList implements ToDoListInterface {
             return;
         }
 
+        // insert at index 0
+        if (p.task.compareTo(task) > 0){
+            newEntry.next = head;
+            head = newEntry;
+            length++;
+            return;
+        }
+
         // traverse
         while (p.next != null && p.next.task.compareTo(task) < 0) {
             p = p.next;
@@ -91,7 +112,6 @@ public class ToDoList implements ToDoListInterface {
         // insert
         if (p.next != null) newEntry.next = p.next;  // if end of list not reached
         p.next = newEntry;
-
         length++;
     }
 
@@ -202,7 +222,7 @@ public class ToDoList implements ToDoListInterface {
     @Override
     public String toString() {
 
-        String result = "ToDos:" + "\n";
+        String result = "";
         Entry p = head;
         for (int i = 0; i < length; i++) {
             result += "[" + i + "] " + p.task.toString() + "\n";
@@ -212,9 +232,3 @@ public class ToDoList implements ToDoListInterface {
     }
 }
 
-// Fragen
-// 1. Aufgabenstellung: alle unerledigten Aufgaben erfragen vs. Interface removeAllDoneTasks
-// 2. zwei Objekte vom Typ GregorianCalendar die das gleiche Datum, aber unterschiedliche (Milli)Sekunden haben,
-// gelten nicht als gleich. Sie sollten es aber laut Aufgabenstellung, oder nicht?
-// 3. keine NullpointerException für getPendingTasksUntilDeadline?
-// 4. getPendingTasksUntilDeadline: sollen Tasks mit gleicher Deadline im Ergebnis berücksichtigt werden?

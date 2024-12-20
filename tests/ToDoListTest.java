@@ -1,7 +1,9 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -11,30 +13,26 @@ public class ToDoListTest {
     ToDoList oneEntryList;
     ToDoList emptyList;
     Task t1;
+    Task t2;
+    Task t3;
 
     @BeforeEach
     public void createLists() {
 
-        GregorianCalendar cal1 = new GregorianCalendar();
-        cal1.set(Calendar.DAY_OF_MONTH, 3);
-        // System.out.println(cal1.getTime());
+        GregorianCalendar cal1 = new GregorianCalendar(2024, Calendar.MARCH, 3);
         t1 = new Task("work out", cal1, false);
 
-        GregorianCalendar cal2 = new GregorianCalendar();
-        cal2.set(Calendar.DAY_OF_MONTH, 20);
-        // System.out.println(cal2.getTime());
-        Task t2 = new Task("shop", cal2, false);
+        GregorianCalendar cal2 = new GregorianCalendar(2024, Calendar.MARCH, 20);
+        t2 = new Task("shop", cal2, false);
 
-        GregorianCalendar cal3 = new GregorianCalendar();
-        cal3.set(Calendar.DAY_OF_MONTH, 9);
-        // System.out.println(cal3.getTime());
-        Task t3 = new Task("call neo", cal3, false);
+        GregorianCalendar cal3 = new GregorianCalendar(2024, Calendar.MARCH, 9);
+        t3 = new Task("call neo", cal3, false);
 
         threeEntriesList = new ToDoList();
         threeEntriesList.addTask(t1);
         threeEntriesList.addTask(t2);
         threeEntriesList.addTask(t3);
-        System.out.println(threeEntriesList);
+        // System.out.println(threeEntriesList);
 
         oneEntryList = new ToDoList();
         oneEntryList.addTask(t1);
@@ -50,6 +48,16 @@ public class ToDoListTest {
     @Test
     public void testGetTask() {
         assertEquals(t1, threeEntriesList.getTask(0));
+        assertEquals(t2, threeEntriesList.getTask(2));
+        assertEquals(t3, threeEntriesList.getTask(1));
+
+        GregorianCalendar cal4 = new GregorianCalendar(2024, Calendar.MARCH, 1);
+        Task t4 = new Task("text batman", cal4, false);
+        threeEntriesList.addTask(t4);
+        assertEquals(t4, threeEntriesList.getTask(0));
+
+        assertEquals(t1, oneEntryList.getTask(0));
+
     }
 
     @Test
@@ -74,23 +82,59 @@ public class ToDoListTest {
 
     @Test
     public void testAddTaskWithEqualDeadline() {
-        GregorianCalendar cal4 = new GregorianCalendar();
-        cal4.set(Calendar.DAY_OF_MONTH, 9);
+        GregorianCalendar cal4 = new GregorianCalendar(2024, Calendar.MARCH, 9);
         Task t4 = new Task("text batman", cal4, false);
         threeEntriesList.addTask(t4);
         System.out.println(threeEntriesList);
         assertEquals(threeEntriesList.getTask(1), t4);
+
+
+        GregorianCalendar cal5 = new GregorianCalendar(2024, Calendar.MARCH, 9);
+        Task t5 = new Task("text robin", cal5, false);
+        threeEntriesList.addTask(t5);
+        System.out.println(threeEntriesList);
+        assertEquals(threeEntriesList.getTask(1), t5);
+    }
+
+    @Test
+    public void testAddTaskInFirstPlace(){
+        GregorianCalendar cal4 = new GregorianCalendar(2024, Calendar.MARCH, 1);
+        Task t4 = new Task("text batman", cal4, false);
+        threeEntriesList.addTask(t4);
+        System.out.println(threeEntriesList);
+        assertEquals(threeEntriesList.getTask(0), t4);
+    }
+
+    @Test
+    public void testAddTaskInLastPlace(){
+        GregorianCalendar cal4 = new GregorianCalendar(2024, Calendar.MARCH, 25);
+        Task t4 = new Task("text batman", cal4, false);
+        threeEntriesList.addTask(t4);
+        System.out.println(threeEntriesList);
+        assertEquals(threeEntriesList.getTask(3), t4);
     }
 
     @Test
     public void testRemoveTaskFromBeginning() {
+        System.out.println(threeEntriesList);
+
         threeEntriesList.removeTask(0);
         assertEquals(threeEntriesList.length(), 2);
         System.out.println(threeEntriesList);
+
+        threeEntriesList.removeTask(0);
+        System.out.println(threeEntriesList);
+        assertEquals(threeEntriesList.length(), 1);
+
+        threeEntriesList.removeTask(0);
+        System.out.println(threeEntriesList);
+        assertEquals(threeEntriesList.length(), 0);
+
     }
 
     @Test
     public void testRemoveTaskFromEnd() {
+        System.out.println(threeEntriesList);
         threeEntriesList.removeTask(2);
         assertEquals(threeEntriesList.length(), 2);
         System.out.println(threeEntriesList);
@@ -102,19 +146,63 @@ public class ToDoListTest {
 
     @Test
     public void testRemoveTaskFromMiddle() {
+        System.out.println(threeEntriesList);
         threeEntriesList.removeTask(1);
         assertEquals(threeEntriesList.length(), 2);
         System.out.println(threeEntriesList);
-
 
         assertThrows(IllegalStateException.class, () -> emptyList.removeTask(0));
     }
 
     @Test
-    public void testRemoveTaskFromMEmptyList() {
-        assertThrows(IllegalStateException.class, () -> emptyList.removeTask(0));
+    public void testRemoveTaskFromBMiddleMultipleTimes() {
+
+
+        GregorianCalendar cal4 = new GregorianCalendar(2024, Calendar.MARCH, 25);
+        Task t4 = new Task("text batman", cal4, false);
+        threeEntriesList.addTask(t4);
+        System.out.println(threeEntriesList);
+
+        threeEntriesList.removeTask(3);
+        assertEquals(threeEntriesList.length(), 3);
+        System.out.println(threeEntriesList);
+
+        threeEntriesList.addTask(t4);
+        assertEquals(threeEntriesList.length(), 4);
+        System.out.println(threeEntriesList);
+
+        threeEntriesList.removeTask(3);
+        System.out.println(threeEntriesList);
+        assertEquals(threeEntriesList.length(), 3);
+
+        threeEntriesList.markTaskAsDone(0);
+        threeEntriesList.markTaskAsDone(2);
+        threeEntriesList.removeAllDoneTasks();
+        System.out.println("after removeAllDoneTasks");
+        System.out.println(threeEntriesList);
+
+        threeEntriesList.removeTask(0);
+        System.out.println(threeEntriesList);
+        assertEquals(threeEntriesList.length(), 0);
+
+       /* threeEntriesList.removeTask(0);
+        System.out.println(threeEntriesList);
+        assertEquals(threeEntriesList.length(), 1);*/
+
     }
 
+
+    @Test
+    public void testRemoveTaskFromOneEntryList() {
+        System.out.println(oneEntryList);
+        oneEntryList.removeTask(0);
+        System.out.println(oneEntryList);
+    }
+
+    @Test
+    public void testRemoveTaskFromEmptyList() {
+        assertThrows(IllegalStateException.class, () -> emptyList.removeTask(0));
+    }
 
 
     @Test
@@ -169,46 +257,44 @@ public class ToDoListTest {
 
     @Test
     public void testGetPendingTasksUntilDeadlineUntilMiddle() {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.set(Calendar.DAY_OF_MONTH, 15);
-        System.out.println(cal.getTime());
-        assertEquals(2, threeEntriesList.getPendingTasksUntilDeadline(cal).length);
+        GregorianCalendar cal = new GregorianCalendar(2024, Calendar.MARCH, 10);
+        t1.setDone(true);
+        System.out.println(threeEntriesList);
+        assertEquals(1, threeEntriesList.getPendingTasksUntilDeadline(cal).length);
     }
 
     @Test
     public void testGetPendingTasksUntilDeadlineUntilEnd() {
 
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.set(Calendar.DAY_OF_MONTH, 25);
-        assertEquals(3, threeEntriesList.getPendingTasksUntilDeadline(cal).length);
-        assertEquals(1, oneEntryList.getPendingTasksUntilDeadline(cal).length);
+        GregorianCalendar cal = new GregorianCalendar(2024, Calendar.MARCH, 25);
+
+        t1.setDone(true);
+        t2.setDone(true);
+        System.out.println(threeEntriesList);
+
+        assertEquals(1, threeEntriesList.getPendingTasksUntilDeadline(cal).length);
     }
 
     @Test
     public void testGetPendingTasksEmptyList() {
 
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.set(Calendar.DAY_OF_MONTH, 25);
+        GregorianCalendar cal = new GregorianCalendar(2024, Calendar.MARCH, 25);
         assertEquals(0, emptyList.getPendingTasksUntilDeadline(cal).length);
     }
 
     @Test
     public void testGetPendingTasksResult0() {
 
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.set(Calendar.DAY_OF_MONTH, 1);
+        GregorianCalendar cal = new GregorianCalendar(2024, Calendar.MARCH, 1);
         assertEquals(0, threeEntriesList.getPendingTasksUntilDeadline(cal).length);
     }
 
     @Test
     public void testGetPendingTasksEqualDeadline() {
 
-        threeEntriesList.markTaskAsDone(0);
-        threeEntriesList.markTaskAsDone(1);
-
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.set(Calendar.DAY_OF_MONTH, 9);
-
-        assertEquals(2, threeEntriesList.getPendingTasksUntilDeadline(cal).length);
+        t1.setDone(true);
+        System.out.println(threeEntriesList);
+        GregorianCalendar cal = new GregorianCalendar(2024, Calendar.MARCH, 9);
+        assertEquals(1, threeEntriesList.getPendingTasksUntilDeadline(cal).length);
     }
 }
